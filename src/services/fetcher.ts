@@ -1,15 +1,16 @@
+import { singleton } from '@aurelia/kernel'
 import simpleGit, { SimpleGit, SimpleGitOptions } from 'simple-git'
-import { inject, injectable } from 'inversify'
+import { Config } from '../config'
 
-@injectable()
+@singleton
 export class Fetcher {
   private git: SimpleGit
   private repoPath: string
   private options: Partial<SimpleGitOptions>
   private command: string
 
-  constructor() {
-    this.repoPath = process.env.REPO_URL
+  constructor(config: Config) {
+    this.repoPath = config.repoUrl
     this.options = {
       baseDir: './data/',
       binary: 'git',

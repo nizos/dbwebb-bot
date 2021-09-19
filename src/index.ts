@@ -1,11 +1,9 @@
 require('dotenv').config()
-import container from './inversify.config'
-import { TYPES } from './types'
+import { container } from './aurelia-di'
 import { Bot } from './bot'
 
-let bot = container.get<Bot>(TYPES.Bot)
-
-bot
+container
+  .get(Bot)
   .listen()
   .then(() => {
     console.log('Logged in!')

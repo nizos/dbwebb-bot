@@ -1,14 +1,11 @@
+import { singleton } from '@aurelia/kernel'
 import { Message } from 'discord.js'
 import { Commands } from '../commands/commands'
-import { inject, injectable } from 'inversify'
-import { TYPES } from '../types'
 
-@injectable()
+@singleton
 export class Responder {
-  private commands: Commands
-  constructor(@inject(TYPES.Commands) commands: Commands) {
-    this.commands = commands
-  }
+  constructor(public readonly commands: Commands) {}
+
   async handle(message: Message): Promise<Message | Message[]> {
     const [command, ...args] = message.content.slice(1).split(' ')
     console.log(command)

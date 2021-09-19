@@ -1,39 +1,25 @@
-import { Message, Intents, Collection } from 'discord.js'
-import { Client } from './client'
+import { singleton } from '@aurelia/kernel'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v9'
-import { inject, injectable } from 'inversify'
-import { TYPES } from './types'
-import { Handler } from './services/handler'
-import { Fetcher } from './services/fetcher'
-import { Commands } from './commands/commands'
+import { Collection, Message } from 'discord.js'
 import fs from 'fs'
+import { Client } from './client'
+import { Commands } from './commands/commands'
+import { Config } from './config'
+import { Fetcher } from './services/fetcher'
+import { Handler } from './services/handler'
 
-@injectable()
+@singleton
 export class Bot {
-  private client: Client
-  private readonly token: string
-  private handler: Handler
-  private fetcher: Fetcher
-  private commands: Commands
-
   constructor(
-    @inject(TYPES.Client) client: Client,
-    @inject(TYPES.Token) token: string,
-    @inject(TYPES.Handler) handler: Handler,
-    @inject(TYPES.Fetcher) fetcher: Fetcher,
-    @inject(TYPES.Commands) commands: Commands,
-  ) {
-    this.client = client
-    this.token = token
-    this.handler = handler
-    this.fetcher = fetcher
-    this.commands = commands
-  }
+    private readonly client: Client,
+    private readonly config: Config,
+    private readonly handler: Handler,
+    private readonly fetcher: Fetcher,
+    private readonly commands: Commands,
+  ) {}
 
   public async listen(): Promise<string> {
-    const BOT_TOKEN = process.env.BOT_TOKEN
-    const GUILD_ID = process.env.GUILD_ID
     await this.fetcher.initialize()
 
     const commandFiles = fs
@@ -57,16 +43,16 @@ export class Bot {
       const REST_VER = { version: '9' }
       const COMMANDS = { body: botCommands }
       const CLIENT_ID = this.client.user.id
-      const rest = new REST(REST_VER).setToken(BOT_TOKEN)
+      const rest = new REST(REST_VER).setToken(this.config.token)
 
       ;(async () => {
         try {
-          if (!GUILD_ID) {
+          if (!this.config.guildId) {
             await rest.put(Routes.applicationCommands(CLIENT_ID), COMMANDS)
             console.log('Successfully registered application commands.')
           } else {
             await rest.put(
-              Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
+              Routes.applicationGuildCommands(CLIENT_ID, this.config.guildId),
               COMMANDS,
             )
             console.log('Successfully registered application test commands.')
@@ -101,6 +87,6 @@ export class Bot {
         })
       }
     })
-    return this.client.login(this.token)
+    return this.client.login(this.config.token)
   }
 }

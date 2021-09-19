@@ -1,7 +1,5 @@
-import { Client as DiscordClient, Intents, Collection } from 'discord.js'
-import { injectable } from 'inversify'
+import { Client as DiscordClient, Collection, Intents } from 'discord.js'
 
-@injectable()
 export class Client extends DiscordClient {
   public commands: Collection<unknown, any>
   constructor() {

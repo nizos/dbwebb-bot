@@ -1,5 +1,4 @@
 import { Command } from '../interfaces/command'
-import { inject, injectable } from 'inversify'
 import { Admin } from './public/admin'
 import { Akr } from './public/akr'
 import { Env } from './public/env'
@@ -11,11 +10,9 @@ import { Labb } from './public/labb'
 import { Me } from './public/me'
 import { Ping } from './public/ping'
 import { Uppgift } from './public/uppgift'
-import { Map } from 'typescript'
 
-@injectable()
 export class Commands {
-  public list: Map<Command>
+  public list: Map<string, Command>
 
   constructor() {
     this.list = new Map()

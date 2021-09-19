@@ -1,8 +1,6 @@
-import { injectable } from 'inversify'
 import authors from '../data/authors/authors.json'
 import fs from 'fs'
 
-@injectable()
 export class Parser {
   public fsPromises = fs.promises
 

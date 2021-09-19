@@ -15,7 +15,7 @@ container
   .bind<Client>(TYPES.Client)
   .toConstantValue(
     new Client({
-      intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+      intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILDS],
     }),
   )
 container.bind<Commands>(TYPES.Commands).to(Commands).inSingletonScope()

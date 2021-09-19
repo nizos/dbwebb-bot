@@ -9,18 +9,36 @@ import { Kunskap } from './public/kunskap'
 import { Kurs } from './public/kurs'
 import { Labb } from './public/labb'
 import { Me } from './public/me'
+import { Ping } from './public/ping'
 import { Uppgift } from './public/uppgift'
+import { Map } from 'typescript'
 
 @injectable()
 export class Commands {
-  public admin: Command = Admin
-  public akr: Command = Akr
-  public env: Command = Env
-  public guide: Command = Guide
-  public kmom: Command = Kmom
-  public kunskap: Command = Kunskap
-  public kurs: Command = Kurs
-  public labb: Command = Labb
-  public me: Command = Me
-  public uppgift: Command = Uppgift
+  public list: Map<Command>
+
+  constructor() {
+    this.list = new Map()
+    this.list.set('admin', Admin)
+    this.list.set('akr', Akr)
+    this.list.set('env', Env)
+    this.list.set('guide', Guide)
+    this.list.set('kmom', Kmom)
+    this.list.set('kunskap', Kunskap)
+    this.list.set('kurs', Kurs)
+    this.list.set('labb', Labb)
+    this.list.set('me', Me)
+    this.list.set('ping', Ping)
+    this.list.set('uppgift', Uppgift)
+  }
+
+  public get(command) {
+    return this.list.get(command)
+  }
+
+  public async execute(interaction) {
+    const commandName = interaction['commandName']
+    console.log('commandName: ', commandName)
+    return await this.list.get(commandName).execute(interaction)
+  }
 }

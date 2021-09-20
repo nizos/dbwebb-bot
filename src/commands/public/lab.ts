@@ -3,7 +3,7 @@ import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
 import { Parser } from '../../services/parser'
 
-export const Labb: Command = {
+export const Lab: Command = {
   data: new SlashCommandBuilder()
     .setName('labb')
     .setDescription('Visar labbmiljö instruktioner'),

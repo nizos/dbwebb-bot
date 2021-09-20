@@ -16,12 +16,12 @@ export class Handler {
     )
   }
 
-  async handle(message: Message): Promise<Message | Message[]> {
-    if (this.proceed(message)) {
-      await this.responder.handle(message)
-    } else {
-      // throw?
-      return Promise.reject()
-    }
-  }
+  // async handle(message: Message): Promise<Message | Message[]> {
+  //   if (this.proceed(message)) {
+  //     await this.responder.handle(message)
+  //   } else {
+  //     // throw?
+  //     return Promise.reject()
+  //   }
+  // }
 }

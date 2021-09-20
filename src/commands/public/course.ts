@@ -2,8 +2,11 @@ import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
 import { Parser } from '../../services/parser'
+import { Builder } from '../../services/builder'
 
-export const Kurs: Command = {
+const builder = new Builder()
+
+export const Course: Command = {
   data: new SlashCommandBuilder()
     .setName('kurs')
     .setDescription('Visar kurs information')
@@ -12,31 +15,35 @@ export const Kurs: Command = {
         .setName('namn')
         .setDescription('kursnamn')
         .setRequired(true)
-        .addChoice('python', 'python')
-        .addChoice('vlinux', 'vlinux')
-        .addChoice('design', 'design'),
+        .addChoices(builder.getCourseOptions()),
     )
     .addStringOption((option) =>
       option
         .setName('version')
-        .setDescription('Kurs version')
-        .setRequired(false)
-        .addChoice('1', 'v1')
-        .addChoice('2', 'v2')
-        .addChoice('3', 'v3'),
+        .setDescription('kursversion')
+        .setRequired(false),
     ),
   async execute(interaction) {
     // Get user input from interaction
+    const msg = interaction.options
+    console.log('Command kurs - msg: ', msg)
     const name = interaction.options.getString('namn')
     const version = interaction.options.getString('version')
-    let courseName: string = name.toLowerCase()
-    if (version) {
-      courseName += '-' + version.toLowerCase()
+    console.log('Command kurs - name: ', name)
+    console.log('Command kurs - version: ', version)
+
+    let courseName: string
+    if (name != 'search') {
+      courseName = version ? name + '-v' + version : name
+    } else {
+      courseName = version
     }
+
+    console.log('Command kurs - courseName: ', courseName)
 
     // Get course matching request
     const parser = new Parser()
-    const course = await parser.getCourse(name)
+    const course = await parser.getCourse(courseName)
 
     // Create response and send it
     const messageEmbed = new MessageEmbed()

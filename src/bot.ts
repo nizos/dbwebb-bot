@@ -38,9 +38,9 @@ export class Bot {
      * probably cleaner to do this
      * this.client.on('messageCreate', this.onMessageCreate.bind(this))
      */
-    this.client.on('messageCreate', (message: Message) => {
-      this.onMessageCreate(message)
-    })
+    // this.client.on('messageCreate', (message: Message) => {
+    //   this.onMessageCreate(message)
+    // })
 
     this.client.on('interactionCreate', async (interaction) => {
       console.log('Bot interaction: ', interaction)
@@ -58,14 +58,14 @@ export class Bot {
     return this.client.login(this.config.token)
   }
 
-  private async onMessageCreate(message: Message) {
-    try {
-      await this.handler.handle(message)
-      console.log('Response sent!')
-    } catch {
-      console.log('Response not sent!')
-    }
-  }
+  // private async onMessageCreate(message: Message) {
+  //   try {
+  //     await this.handler.handle(message)
+  //     console.log('Response sent!')
+  //   } catch {
+  //     console.log('Response not sent!')
+  //   }
+  // }
 
   private async onReady(
     botCommands: any[],

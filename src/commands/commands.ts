@@ -1,28 +1,30 @@
 import { CommandInteraction } from 'discord.js'
 import { Command } from '../interfaces/command'
-import { Akr } from './public/akr'
-import { Env } from './public/env'
+import { Acronym } from './public/acronym'
+import { Environment } from './public/environment'
 import { Guide } from './public/guide'
-import { Kmom } from './public/kmom'
-import { Kunskap } from './public/kunskap'
-import { Kurs } from './public/kurs'
-import { Labb } from './public/labb'
+import { Activity } from './public/activity'
+import { Knowledge } from './public/knowledge'
+import { Course } from './public/course'
+import { Lab } from './public/lab'
 import { Me } from './public/me'
 import { Ping } from './public/ping'
-import { Uppgift } from './public/uppgift'
+import { Assignment } from './public/assignment'
+import { Search } from './public/search'
 
 export class Commands {
   list = new Map<string, Command>([
-    ['akr', Akr],
-    ['env', Env],
+    ['akr', Acronym],
+    ['env', Environment],
     ['guide', Guide],
-    ['kmom', Kmom],
-    ['kunskap', Kunskap],
-    ['kurs', Kurs],
-    ['labb', Labb],
+    ['kmom', Activity],
+    ['kunskap', Knowledge],
+    ['kurs', Course],
+    ['labb', Lab],
     ['me', Me],
     ['ping', Ping],
-    ['uppgift', Uppgift],
+    ['sök', Search],
+    ['uppgift', Assignment],
   ])
 
   /**

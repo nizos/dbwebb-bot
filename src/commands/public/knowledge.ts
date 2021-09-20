@@ -3,7 +3,7 @@ import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
 import { Parser } from '../../services/parser'
 
-export const Kunskap: Command = {
+export const Knowledge: Command = {
   data: new SlashCommandBuilder()
     .setName('kunskap')
     .setDescription('Visar en kunskapsbank artikel'),

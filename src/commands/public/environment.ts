@@ -3,15 +3,15 @@ import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
 import { Parser } from '../../services/parser'
 
-export const Akr: Command = {
+export const Environment: Command = {
   data: new SlashCommandBuilder()
-    .setName('akr')
-    .setDescription('Visar användarens bth-akronym'),
+    .setName('env')
+    .setDescription('Visar användarens utvecklingsmiljö'),
   async execute(interaction) {
     // Create response and send it
     const messageEmbed = new MessageEmbed()
-    messageEmbed.setTitle('Akr')
-    messageEmbed.setDescription('Hello from akr!')
+    messageEmbed.setTitle('Env')
+    messageEmbed.setDescription('Hello from env!')
     interaction.reply({ embeds: [messageEmbed] })
     return
   },

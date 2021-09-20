@@ -3,16 +3,15 @@ import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
 import { Parser } from '../../services/parser'
 
-export const Kmom: Command = {
+export const Assignment: Command = {
   data: new SlashCommandBuilder()
-    .setName('kmom')
-    .setDescription('Visar kursmoment'),
+    .setName('uppgift')
+    .setDescription('Visar en uppgift'),
   async execute(interaction) {
     // Create response and send it
     const messageEmbed = new MessageEmbed()
-    messageEmbed.setTitle('Kmom')
-    messageEmbed.setDescription('Hello from kmom!')
+    messageEmbed.setTitle('Uppgift')
+    messageEmbed.setDescription('Hello from uppgift!')
     interaction.reply({ embeds: [messageEmbed] })
-    return
   },
 }

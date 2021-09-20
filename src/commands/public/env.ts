@@ -1,16 +1,18 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { Message, MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
+import { Parser } from '../../services/parser'
 
 export const Env: Command = {
   data: new SlashCommandBuilder()
     .setName('env')
     .setDescription('Visar användarens utvecklingsmiljö'),
   async execute(interaction) {
-    console.log(interaction)
-
-    const { author, channel } = interaction
-    await channel.send('Hello from env!')
+    // Create response and send it
+    const messageEmbed = new MessageEmbed()
+    messageEmbed.setTitle('Env')
+    messageEmbed.setDescription('Hello from env!')
+    interaction.reply({ embeds: [messageEmbed] })
     return
   },
 }

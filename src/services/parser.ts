@@ -1,10 +1,9 @@
+// need to generate data for this to exist maybe?
 import authors from '../data/authors/authors.json'
-import fs from 'fs'
+import { promises as fs } from 'fs'
 
 export class Parser {
-  public fsPromises = fs.promises
-
-  public sortResults(results) {
+  sortResults(results: string[]) {
     results.sort((a, b) => {
       if (a.toUpperCase().length == b.toUpperCase().length) {
         if (a.toUpperCase().length < b.toUpperCase().length) {
@@ -23,40 +22,34 @@ export class Parser {
     return results
   }
 
-  async getDirectory(name) {
+  async getDirectory(name: string) {
     try {
-      return this.fsPromises.readdir('./data/website/content/' + name, {
+      return fs.readdir('./data/website/content/' + name, {
         withFileTypes: true,
       })
-    } catch (err) {
-      console.log(
-        `Error encountered while getting directory ${name}. Error: ${err}.`,
+    } catch (error) {
+      console.error(
+        `Error encountered while getting directory ${name}. Error: ${error}.`,
       )
     }
   }
 
-  async getFile(path) {
+  async getFile(path: string) {
     try {
-      return this.fsPromises.readFile(path)
-    } catch (err) {
-      console.log(
-        `Error encountered while getting file ${path}. Error: ${err}.`,
+      return fs.readFile(path)
+    } catch (error) {
+      console.error(
+        `Error encountered while getting file ${path}. Error: ${error}.`,
       )
     }
   }
 
   async getCourses() {
     try {
-      let courses = []
       const coursesDir = await this.getDirectory('kurser')
-      for (const entry of coursesDir) {
-        if (entry.isDirectory) {
-          courses.push(entry.name)
-        }
-      }
-      return courses
-    } catch (err) {
-      console.log(`Error encountered while getting courses. Error: ${err}.`)
+      return coursesDir.filter((d) => d.isDirectory).map((d) => d.name)
+    } catch (error) {
+      console.error(`Error encountered while getting courses. Error: ${error}.`)
     }
   }
 
@@ -64,22 +57,18 @@ export class Parser {
     try {
       // Get matching courses by name
       const courses = await this.getCourses()
-      let matches = []
-      for (const course of courses) {
-        if (course.includes(name)) {
-          matches.push(course)
-        }
-      }
+      const matches = courses.filter((c) => c.includes(name))
+
       // Sort results
-      matches = this.sortResults(matches)
+      const sortedMatches = this.sortResults(matches)
 
       // Process best match
-      console.log('Total results: ', matches.length)
-      console.log('Best result: ', matches[0])
-      return matches[0]
-    } catch (err) {
-      console.log(
-        `Error encountered while getting course ${name}. Error: ${err}.`,
+      console.log('Total results: ', sortedMatches.length)
+      console.log('Best result: ', sortedMatches[0])
+      return sortedMatches[0]
+    } catch (error) {
+      console.error(
+        `Error encountered while getting course ${name}. Error: ${error}.`,
       )
     }
   }
@@ -89,8 +78,8 @@ export class Parser {
       const courseName = await this.findCourse(name)
       const coursePath =
         './data/website/content/kurser/' + courseName + '/index.md'
-      const courseFile = await this.getFile(coursePath)
-      const courseData = courseFile.toString()
+      const courseData = (await this.getFile(coursePath)).toString()
+
       // Details
       const meta = courseData.substring(
         courseData.indexOf('---\n') + 4,
@@ -98,12 +87,14 @@ export class Parser {
       )
       const body = courseData.substring(courseData.indexOf('...\n') + 4)
       const sections = body.split('\n\n\n\n')
+
       // Acronym
       const acrStart = meta.substring(meta.indexOf('author:\n') + 8)
       const acronym = acrStart.substring(
         acrStart.indexOf('- ') + 2,
         acrStart.indexOf('\n'),
       )
+
       // Author
       const author = authors[acronym]
       // Date
@@ -111,6 +102,7 @@ export class Parser {
         meta.indexOf('"', meta.indexOf('revision:\n') + 10) + 1,
       )
       const date = dateStart.substring(0, dateStart.indexOf('":'))
+
       // Title
       const title = body.substring(0, body.indexOf('\n'))
       // Description
@@ -118,8 +110,19 @@ export class Parser {
         body.indexOf('\n\n', body.indexOf('...\n') + 4) + 2,
       )
       const description = descStart.substring(0, descStart.indexOf('\n'))
+
       // URL
       const url = 'https://dbwebb.se/kurser/' + courseName
+
+      /**
+       *
+       * const headings = sections.reduce((acc, cur) => {
+       *   // modify acc
+       *   return acc
+       * }, '')
+       *
+       */
+
       // headings
       let headings = ''
       for (let i = 0; i < sections.length; i++) {
@@ -147,21 +150,22 @@ export class Parser {
         name: courseName,
         url: url,
       }
-    } catch (err) {
-      console.log(
-        `Error encountered while getting course ${name}. Error: ${err}.`,
+    } catch (error) {
+      console.error(
+        `Error encountered while getting course ${name}. Error: ${error}.`,
       )
     }
   }
 
-  public getDescription = (text) => {
+  // methods?
+  getDescription = (text: string) => {
     const noMetaData = text.substring(text.indexOf('...\n'))
     const noTitle = noMetaData.substring(noMetaData.indexOf('\n\n') + 2)
     const description = noTitle.substring(0, noTitle.indexOf('\n\n'))
     return description
   }
 
-  public getAuthorAcr = (text) => {
+  getAuthorAcr = (text: string) => {
     console.log('getAuthorAcr called')
     const authors = text.substring(text.indexOf('author:\n') + 8)
     const author = authors.substring(
@@ -171,21 +175,21 @@ export class Parser {
     return author
   }
 
-  public getAuthor = (acr) => {
+  getAuthor = (acr: string) => {
     console.log('getAuthorAcr called')
     console.log(`getAuthor(${acr})`)
     console.log(`Authors: ${authors}`)
     return authors[acr]
   }
 
-  public getTitle = (text) => {
+  getTitle = (text: string) => {
     console.log('getAuthorAcr called')
     const noMetaData = text.substring(text.indexOf('...\n') + 4)
     const title = noMetaData.substring(0, noMetaData.indexOf('\n'))
     return title
   }
 
-  public getDate = (text) => {
+  getDate = (text: string) => {
     console.log('getAuthorAcr called')
     const revisions = text.substring(text.indexOf('revision:\n'))
     const date = revisions.substring(

@@ -1,7 +1,9 @@
-import { Client as DiscordClient, Collection, Intents } from 'discord.js'
+import { Client as DiscordClient, Intents, Collection } from 'discord.js'
 
 export class Client extends DiscordClient {
+  // maybe put this in the DI container?
   public commands: Collection<unknown, any>
+
   constructor() {
     super({
       intents: [

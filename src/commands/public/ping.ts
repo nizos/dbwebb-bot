@@ -1,29 +1,17 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
+import { Parser } from '../../services/parser'
 
 export const Ping: Command = {
   data: new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Replies with pong')
-    .addStringOption((option) =>
-      option
-        .setName('namn')
-        .setDescription('kursnamn')
-        .setRequired(true)
-        .addChoice('python', 'gif_funny')
-        .addChoice('vlinux', 'gif_meme')
-        .addChoice('htmlphp', 'gif_movie'),
-    )
-    .addStringOption((option) =>
-      option
-        .setName('version')
-        .setDescription('Kurs version')
-        .setRequired(false)
-        .addChoice('1', 'kurs-v1')
-        .addChoice('2', 'kurs-v2')
-        .addChoice('3', 'kurs-v3'),
-    ),
+    .setDescription('svarar med pong'),
   async execute(interaction) {
-    interaction.reply({ content: 'Pong' })
+    // Create response and send it
+    const messageEmbed = new MessageEmbed()
+    messageEmbed.setTitle('Ping')
+    messageEmbed.setDescription('Pong!')
+    interaction.reply({ embeds: [messageEmbed] })
   },
 }

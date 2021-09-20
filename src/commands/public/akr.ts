@@ -1,16 +1,18 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { Message, MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
+import { Parser } from '../../services/parser'
 
 export const Akr: Command = {
   data: new SlashCommandBuilder()
     .setName('akr')
     .setDescription('Visar användarens bth-akronym'),
   async execute(interaction) {
-    console.log(interaction)
-
-    const { author, channel } = interaction
-    await channel.send('Hello from akr!')
+    // Create response and send it
+    const messageEmbed = new MessageEmbed()
+    messageEmbed.setTitle('Akr')
+    messageEmbed.setDescription('Hello from akr!')
+    interaction.reply({ embeds: [messageEmbed] })
     return
   },
 }

@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
-import { Message, MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
 import { Parser } from '../../services/parser'
 
@@ -12,24 +12,33 @@ export const Kurs: Command = {
         .setName('namn')
         .setDescription('kursnamn')
         .setRequired(true)
-        .addChoice('Python', 'python')
-        .addChoice('VLinux', 'vlinux')
-        .addChoice('Design', 'design'),
+        .addChoice('python', 'python')
+        .addChoice('vlinux', 'vlinux')
+        .addChoice('design', 'design'),
     )
     .addStringOption((option) =>
       option
         .setName('version')
         .setDescription('Kurs version')
         .setRequired(false)
-        .addChoice('1', 'kurs-v1')
-        .addChoice('2', 'kurs-v2')
-        .addChoice('3', 'kurs-v3'),
+        .addChoice('1', 'v1')
+        .addChoice('2', 'v2')
+        .addChoice('3', 'v3'),
     ),
   async execute(interaction) {
+    // Get user input from interaction
+    const name = interaction.options.getString('namn')
+    const version = interaction.options.getString('version')
+    let courseName: string = name.toLowerCase()
+    if (version) {
+      courseName += '-' + version.toLowerCase()
+    }
+
+    // Get course matching request
     const parser = new Parser()
-    const { channel, content } = interaction
-    const name = content.slice(6)
     const course = await parser.getCourse(name)
+
+    // Create response and send it
     const messageEmbed = new MessageEmbed()
     messageEmbed.setTitle(course.title)
     messageEmbed.setURL(course.url)
@@ -41,7 +50,7 @@ export const Kurs: Command = {
       course.author.url,
     )
     messageEmbed.setFooter(`Last revision: ${course.date}`)
-    await channel.send({ embeds: [messageEmbed] })
+    await interaction.reply({ embeds: [messageEmbed] })
     return
   },
 }

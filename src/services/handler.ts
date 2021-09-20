@@ -10,7 +10,7 @@ export class Handler {
     private readonly responder: Responder,
   ) {}
 
-  public proceed(message: Message): boolean {
+  proceed(message: Message): boolean {
     return (
       message.content.startsWith(this.config.botPrefix) && !message.author.bot
     )
@@ -20,6 +20,7 @@ export class Handler {
     if (this.proceed(message)) {
       await this.responder.handle(message)
     } else {
+      // throw?
       return Promise.reject()
     }
   }

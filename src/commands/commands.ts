@@ -1,5 +1,5 @@
+import { CommandInteraction } from 'discord.js'
 import { Command } from '../interfaces/command'
-import { Admin } from './public/admin'
 import { Akr } from './public/akr'
 import { Env } from './public/env'
 import { Guide } from './public/guide'
@@ -12,29 +12,34 @@ import { Ping } from './public/ping'
 import { Uppgift } from './public/uppgift'
 
 export class Commands {
-  public list: Map<string, Command>
+  list = new Map<string, Command>([
+    ['akr', Akr],
+    ['env', Env],
+    ['guide', Guide],
+    ['kmom', Kmom],
+    ['kunskap', Kunskap],
+    ['kurs', Kurs],
+    ['labb', Labb],
+    ['me', Me],
+    ['ping', Ping],
+    ['uppgift', Uppgift],
+  ])
 
-  constructor() {
-    this.list = new Map()
-    this.list.set('admin', Admin)
-    this.list.set('akr', Akr)
-    this.list.set('env', Env)
-    this.list.set('guide', Guide)
-    this.list.set('kmom', Kmom)
-    this.list.set('kunskap', Kunskap)
-    this.list.set('kurs', Kurs)
-    this.list.set('labb', Labb)
-    this.list.set('me', Me)
-    this.list.set('ping', Ping)
-    this.list.set('uppgift', Uppgift)
-  }
-
-  public get(command) {
+  /**
+   * maybe make it an enum?
+   *
+   * enum Command {
+   *   admin = 'admin'
+   * }
+   *
+   * get(Command.admin)
+   */
+  get(command: string) {
     return this.list.get(command)
   }
 
-  public async execute(interaction) {
-    const commandName = interaction['commandName']
+  async execute(interaction: CommandInteraction) {
+    const commandName = interaction.commandName
     console.log('commandName: ', commandName)
     return await this.list.get(commandName).execute(interaction)
   }

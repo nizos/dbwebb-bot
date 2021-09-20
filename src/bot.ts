@@ -6,8 +6,8 @@ import fs from 'fs'
 import { Client } from './client'
 import { Commands } from './commands/commands'
 import { Config } from './config'
-import { Fetcher } from './services/fetcher'
 import { Handler } from './services/handler'
+import { Fetcher } from './services/fetcher'
 
 @singleton
 export class Bot {
@@ -19,59 +19,27 @@ export class Bot {
     private readonly commands: Commands,
   ) {}
 
-  public async listen(): Promise<string> {
+  async listen(): Promise<string> {
+    const BOT_TOKEN = process.env.BOT_TOKEN
+    const GUILD_ID = process.env.GUILD_ID
     await this.fetcher.initialize()
 
-    const commandFiles = fs
-      .readdirSync('./src/commands/public')
-      .filter((file) => file.endsWith('.ts'))
-    console.log('commandFiles: ', commandFiles)
-
-    const botCommands = []
+    // this was already initialized in Client?
+    // again, maybe put it in the DI container
     this.client.commands = new Collection()
 
-    for (const file of commandFiles) {
-      const command = await import(`./commands/public/${file}`)
-      const commandData = Object.values(command)[0]['data'].toJSON()
-      console.log('commandData: ', commandData)
-      botCommands.push(commandData)
-      this.client.commands.set(commandData.name, command)
-    }
+    const botCommands = await this.getBotCommands()
 
     this.client.once('ready', () => {
-      console.log('Ready!')
-      const REST_VER = { version: '9' }
-      const COMMANDS = { body: botCommands }
-      const CLIENT_ID = this.client.user.id
-      const rest = new REST(REST_VER).setToken(this.config.token)
-
-      ;(async () => {
-        try {
-          if (!this.config.guildId) {
-            await rest.put(Routes.applicationCommands(CLIENT_ID), COMMANDS)
-            console.log('Successfully registered application commands.')
-          } else {
-            await rest.put(
-              Routes.applicationGuildCommands(CLIENT_ID, this.config.guildId),
-              COMMANDS,
-            )
-            console.log('Successfully registered application test commands.')
-          }
-        } catch (error) {
-          if (error) console.error(error)
-        }
-      })()
+      this.onReady(botCommands, BOT_TOKEN, GUILD_ID)
     })
 
+    /**
+     * probably cleaner to do this
+     * this.client.on('messageCreate', this.onMessageCreate.bind(this))
+     */
     this.client.on('messageCreate', (message: Message) => {
-      this.handler
-        .handle(message)
-        .then(() => {
-          console.log('Response sent!')
-        })
-        .catch(() => {
-          console.log('Response not sent!')
-        })
+      this.onMessageCreate(message)
     })
 
     this.client.on('interactionCreate', async (interaction) => {
@@ -88,5 +56,62 @@ export class Bot {
       }
     })
     return this.client.login(this.config.token)
+  }
+
+  private async onMessageCreate(message: Message) {
+    try {
+      await this.handler.handle(message)
+      console.log('Response sent!')
+    } catch {
+      console.log('Response not sent!')
+    }
+  }
+
+  private async onReady(
+    botCommands: any[],
+    BOT_TOKEN: string,
+    GUILD_ID: string,
+  ) {
+    console.log('Ready!')
+    const REST_VER = { version: '9' }
+    const COMMANDS = { body: botCommands }
+    const CLIENT_ID = this.client.user.id
+    const rest = new REST(REST_VER).setToken(BOT_TOKEN)
+
+    try {
+      if (!GUILD_ID) {
+        await rest.put(Routes.applicationCommands(CLIENT_ID), COMMANDS)
+        console.log('Successfully registered application commands.')
+      } else {
+        await rest.put(
+          Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID),
+          COMMANDS,
+        )
+        console.log('Successfully registered application test commands.')
+      }
+    } catch (error) {
+      if (error) console.error(error)
+    }
+  }
+
+  private async getBotCommands() {
+    const ret = []
+    for (const file of this.getCommandFiles()) {
+      const command = await import(`./commands/public/${file}`)
+      const commandData = Object.values(command)[0]['data'].toJSON()
+      console.log('commandData: ', commandData)
+      ret.push(commandData)
+      // should probably not be done here
+      this.client.commands.set(commandData.name, command)
+    }
+    return ret
+  }
+
+  private getCommandFiles() {
+    const commandFiles = fs
+      .readdirSync('./src/commands/public')
+      .filter((file) => file.endsWith('.ts'))
+    console.log('commandFiles: ', commandFiles)
+    return commandFiles
   }
 }

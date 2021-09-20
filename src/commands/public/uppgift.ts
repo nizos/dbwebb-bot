@@ -1,11 +1,17 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
+import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
+import { Parser } from '../../services/parser'
 
 export const Uppgift: Command = {
   data: new SlashCommandBuilder()
     .setName('uppgift')
     .setDescription('Visar en uppgift'),
   async execute(interaction) {
-    interaction.reply({ content: 'Hello from uppgift!' })
+    // Create response and send it
+    const messageEmbed = new MessageEmbed()
+    messageEmbed.setTitle('Uppgift')
+    messageEmbed.setDescription('Hello from uppgift!')
+    interaction.reply({ embeds: [messageEmbed] })
   },
 }

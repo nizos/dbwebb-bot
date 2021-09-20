@@ -5,12 +5,12 @@ import { Config } from '../config'
 @singleton
 export class Fetcher {
   private git: SimpleGit
-  private repoPath: string
+  private repoUrl: string
   private options: Partial<SimpleGitOptions>
   private command: string
 
   constructor(config: Config) {
-    this.repoPath = config.repoUrl
+    this.repoUrl = config.repoUrl
     this.options = {
       baseDir: './data/',
       binary: 'git',
@@ -31,14 +31,14 @@ export class Fetcher {
           await this.git.pull('origin', 'master', { '--no-rebase': null })
           console.log('Successfully updated local dbwebb data.')
         })
-        .catch((err) => {
-          console.log(
-            `Could not update local dbwebb data from remote repository: ${this.repoPath}. Error: ${err}`,
+        .catch((error) => {
+          console.error(
+            `Could not update local dbwebb data from remote repository: ${this.repoUrl}. Error: ${error}`,
           )
         })
-    } catch (err) {
-      console.log(
-        `Error encountered while attempting to update local dbwebb data from remote repository ${this.repoPath}. Error: ${err}.`,
+    } catch (error) {
+      console.error(
+        `Error encountered while attempting to update local dbwebb data from remote repository ${this.repoUrl}. Error: ${error}.`,
       )
     }
   }
@@ -48,18 +48,17 @@ export class Fetcher {
       await this.git
         .status()
         .then(async () => {
-          await this.git.clone(this.repoPath)
-          console.log(`Successfully cloned remote repository ${this.repoPath}.`)
-          // await this.update();
+          await this.git.clone(this.repoUrl)
+          console.log(`Successfully cloned remote repository ${this.repoUrl}.`)
         })
-        .catch((err) => {
-          console.log(
-            `Could not clone remote repository ${this.repoPath}. Error: ${err}`,
+        .catch((error) => {
+          console.error(
+            `Could not clone remote repository ${this.repoUrl}. Error: ${error}`,
           )
         })
-    } catch (err) {
-      console.log(
-        `Error encountered while attempting to clone remote repository ${this.repoPath}. Error: ${err}.`,
+    } catch (error) {
+      console.error(
+        `Error encountered while attempting to clone remote repository ${this.repoUrl}. Error: ${error}.`,
       )
     }
   }

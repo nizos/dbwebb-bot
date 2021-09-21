@@ -5,6 +5,7 @@ import { Environment } from './public/environment'
 import { Guide } from './public/guide'
 import { Activity } from './public/activity'
 import { Knowledge } from './public/knowledge'
+import { Config } from './public/config'
 import { Course } from './public/course'
 import { Lab } from './public/lab'
 import { Me } from './public/me'
@@ -23,6 +24,7 @@ export class Commands {
     ['labb', Lab],
     ['me', Me],
     ['ping', Ping],
+    ['set', Config],
     ['sök', Search],
     ['uppgift', Assignment],
   ])

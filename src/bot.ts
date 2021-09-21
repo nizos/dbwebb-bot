@@ -1,12 +1,11 @@
 import { singleton } from '@aurelia/kernel'
 import { REST } from '@discordjs/rest'
 import { Routes } from 'discord-api-types/v9'
-import { Collection, Message } from 'discord.js'
+import { Collection } from 'discord.js'
 import fs from 'fs'
 import { Client } from './client'
 import { Commands } from './commands/commands'
 import { Config } from './config'
-import { Handler } from './services/handler'
 import { Fetcher } from './services/fetcher'
 
 @singleton
@@ -14,7 +13,6 @@ export class Bot {
   constructor(
     private readonly client: Client,
     private readonly config: Config,
-    private readonly handler: Handler,
     private readonly fetcher: Fetcher,
     private readonly commands: Commands,
   ) {}
@@ -34,14 +32,6 @@ export class Bot {
       this.onReady(botCommands, BOT_TOKEN, GUILD_ID)
     })
 
-    /**
-     * probably cleaner to do this
-     * this.client.on('messageCreate', this.onMessageCreate.bind(this))
-     */
-    // this.client.on('messageCreate', (message: Message) => {
-    //   this.onMessageCreate(message)
-    // })
-
     this.client.on('interactionCreate', async (interaction) => {
       console.log('Bot interaction: ', interaction)
       if (!interaction.isCommand()) return
@@ -57,15 +47,6 @@ export class Bot {
     })
     return this.client.login(this.config.token)
   }
-
-  // private async onMessageCreate(message: Message) {
-  //   try {
-  //     await this.handler.handle(message)
-  //     console.log('Response sent!')
-  //   } catch {
-  //     console.log('Response not sent!')
-  //   }
-  // }
 
   private async onReady(
     botCommands: any[],

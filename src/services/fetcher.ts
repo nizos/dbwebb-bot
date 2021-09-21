@@ -12,7 +12,7 @@ export class Fetcher {
   constructor(config: Config) {
     this.repoUrl = config.repoUrl
     this.options = {
-      baseDir: './data/',
+      baseDir: './src/data/git/',
       binary: 'git',
       maxConcurrentProcesses: 6,
     }

@@ -1,7 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { CommandInteraction, MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
-import { Parser } from '../../services/parser'
 import { Responder } from '../../services/responder'
 
 export const Search: Command = {
@@ -25,38 +24,38 @@ export const Search: Command = {
     const category = interaction.options.getString('kategori')
 
     const searchEverything = async (interaction: CommandInteraction) => {
-      const embeds = await responder.searchCourse(interaction)
-      await interaction.reply(embeds)
+      const embed: MessageEmbed = await responder.searchCourse(interaction)
+      await interaction.reply({ embeds: [embed] })
     }
 
     const searchActivity = async (interaction: CommandInteraction) => {
-      const embeds = await responder.searchCourse(interaction)
-      await interaction.reply(embeds)
+      const embed: MessageEmbed = await responder.searchCourse(interaction)
+      await interaction.reply({ embeds: [embed] })
     }
 
     const searchAssignment = async (interaction: CommandInteraction) => {
-      const embeds = await responder.searchCourse(interaction)
-      await interaction.reply(embeds)
+      const embed: MessageEmbed = await responder.searchCourse(interaction)
+      await interaction.reply({ embeds: [embed] })
     }
 
     const searchCourse = async (interaction: CommandInteraction) => {
-      const embeds = await responder.searchCourse(interaction)
-      await interaction.reply(embeds)
+      const embed: MessageEmbed = await responder.searchCourse(interaction)
+      await interaction.reply({ embeds: [embed] })
     }
 
     const searchGuide = async (interaction: CommandInteraction) => {
-      const embeds = await responder.searchCourse(interaction)
-      await interaction.reply(embeds)
+      const embed: MessageEmbed = await responder.searchCourse(interaction)
+      await interaction.reply({ embeds: [embed] })
     }
 
     const searchKnowledge = async (interaction: CommandInteraction) => {
-      const embeds = await responder.searchKnowledge(interaction)
-      await interaction.reply(embeds)
+      const embed: MessageEmbed = await responder.searchKnowledge(interaction)
+      await interaction.reply({ embeds: [embed] })
     }
 
     const searchLab = async (interaction: CommandInteraction) => {
-      const embeds = await responder.searchCourse(interaction)
-      await interaction.reply(embeds)
+      const embed: MessageEmbed = await responder.searchCourse(interaction)
+      await interaction.reply({ embeds: [embed] })
     }
 
     // Handle search

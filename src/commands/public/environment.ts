@@ -1,18 +1,19 @@
 import { SlashCommandBuilder } from '@discordjs/builders'
 import { MessageEmbed } from 'discord.js'
 import { Command } from '../../interfaces/command'
-import { Parser } from '../../services/parser'
+import { Responder } from '../../services/responder'
 
 export const Environment: Command = {
   data: new SlashCommandBuilder()
     .setName('env')
-    .setDescription('Visar användarens utvecklingsmiljö'),
+    .setDescription('Visar användarens utvecklingsmiljö')
+    .addStringOption((option) =>
+      option.setName('text').setDescription('användare').setRequired(false),
+    ),
   async execute(interaction) {
-    // Create response and send it
-    const messageEmbed = new MessageEmbed()
-    messageEmbed.setTitle('Env')
-    messageEmbed.setDescription('Hello from env!')
-    interaction.reply({ embeds: [messageEmbed] })
+    const responder = new Responder()
+    const embed: MessageEmbed = await responder.getEnvironment(interaction)
+    await interaction.reply({ embeds: [embed] })
     return
   },
 }

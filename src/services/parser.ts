@@ -1,5 +1,5 @@
 // need to generate data for this to exist maybe?
-import authors from '../data/authors/authors.json'
+import authors from '../data/static/authors.json'
 import { promises as fs } from 'fs'
 
 export class Parser {
@@ -7,7 +7,7 @@ export class Parser {
     try {
       const courseName = await this.findCourse(name)
       const coursePath =
-        './data/website/content/kurser/' + courseName + '/index.md'
+        './src/data/git/website/content/kurser/' + courseName + '/index.md'
       const courseData = (await this.getFile(coursePath)).toString()
 
       // Details
@@ -96,7 +96,7 @@ export class Parser {
       // Best result
       const resultURL = sortedMatches[0]
       const resultName = this.sanitizeName(resultURL)
-      const resultPath = './data/website/content/kunskap/' + resultURL
+      const resultPath = './src/data/git/website/content/kunskap/' + resultURL
       const resultData = (await this.getFile(resultPath)).toString()
 
       // Details
@@ -174,7 +174,8 @@ export class Parser {
           const resultFile = sortedMatches[i]
           const resultName = this.sanitizeName(resultFile)
           const resultURL = 'https://dbwebb.se/kunskap/' + resultName
-          const resultPath = './data/website/content/kunskap/' + resultFile
+          const resultPath =
+            './src/data/git/website/content/kunskap/' + resultFile
           const resultData = (await this.getFile(resultPath)).toString()
           const body = resultData.substring(resultData.indexOf('...\n') + 4)
           const title = body.substring(0, body.indexOf('\n'))
@@ -264,7 +265,7 @@ export class Parser {
 
   async getDirectory(name: string) {
     try {
-      return fs.readdir('./data/website/content/' + name, {
+      return fs.readdir('./src/data/git/website/content/' + name, {
         withFileTypes: true,
       })
     } catch (error) {
@@ -285,6 +286,39 @@ export class Parser {
   }
 
   // methods?
+  getEnvironment = (text: string) => {
+    // Format: "Shell: ... Terminal: ... Browser: ... Editor: ... OS: ..."
+    const shell = text.substring(
+      text.indexOf('Shell: ') + 7,
+      text.indexOf('Terminal: '),
+    )
+    const terminal = text.substring(
+      text.indexOf('Terminal: ') + 10,
+      text.indexOf('Browser: '),
+    )
+    const browser = text.substring(
+      text.indexOf('Browser: ') + 9,
+      text.indexOf('Editor: '),
+    )
+    const editor = text.substring(
+      text.indexOf('Editor: ') + 8,
+      text.indexOf('OS: '),
+    )
+    const os = text.substring(text.indexOf('OS: ') + 4)
+    const env = {
+      shell: shell,
+      terminal: terminal,
+      browser: browser,
+      editor: editor,
+      os: os,
+    }
+    return env
+  }
+
+  getDiscordUser = (text: string) => {
+    return text.slice(3, -1)
+  }
+
   getDescription = (text: string) => {
     const noMetaData = text.substring(text.indexOf('...\n'))
     const noTitle = noMetaData.substring(noMetaData.indexOf('\n\n') + 2)

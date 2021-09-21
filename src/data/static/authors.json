@@ -1,0 +1,57 @@
+{
+    "aar": {
+        "name": "Andreas Arnesson",
+        "url": "https://dbwebb.se/author/aar",
+        "image": "https://en.gravatar.com/userimage/104104689/51779836f41000ed40eb88a722e7457f.jpg"
+    },
+    "atb": {
+        "name": "Anton Borg",
+        "url": "https://dbwebb.se/author/atb",
+        "image": "https://www.gravatar.com/avatar/02f8a1876759ad09f215055ff17cc318.jpg"
+    },
+    "ceruza": {
+        "name": "Magnus Aronsson",
+        "url": "https://dbwebb.se/author/ceruza",
+        "image": "https://dbwebb.se/forum/download/file.php?avatar=3142_1452122286.jpg"
+    },
+    "efo": {
+        "name": "Emil Folino",
+        "url": "https://dbwebb.se/author/efo",
+        "image": "https://en.gravatar.com/userimage/27412209/56ac89c41eb7b9806c9184cd9b18fe47.jpg"
+    },
+    "emma": {
+        "name": "Emma Thorén",
+        "url": "https://dbwebb.se/author/emma",
+        "image": "https://www.gravatar.com/avatar/504856645dc488e290897e3490cf42ab.jpg"
+    },
+    "jane": {
+        "name": "Jane Strandberg",
+        "url": "https://dbwebb.se/author/jane",
+        "image": "https://www.gravatar.com/avatar/3e3c0cfbfc8094302431e18e367cc3cc.jpg"
+    },
+    "lew": {
+        "name": "Kenneth Lewenhagen",
+        "url": "https://dbwebb.se/author/lew",
+        "image": "https://www.gravatar.com/avatar/76afdda0bcc913a1d133bb4afe654be6.jpg"
+    },
+    "mbo": {
+        "name": "Martin Boldt",
+        "url": "https://dbwebb.se/author/mbo",
+        "image": "https://www.gravatar.com/avatar/02f8a1876759ad09f215055ff17cc318.jpg"
+    },
+    "moc": {
+        "name": "Martin Borg",
+        "url": "https://dbwebb.se/author/moc",
+        "image": "https://s.gravatar.com/avatar/347dc35e1abf04c74114a07f01026f8e.jpg"
+    },
+    "mos": {
+        "name": "Mikael Roos",
+        "url": "https://dbwebb.se/author/mos",
+        "image": "https://www.gravatar.com/avatar/02f8a1876759ad09f215055ff17cc318.jpg"
+    },
+    "nik": {
+        "name": "Niklas Andersson",
+        "url": "https://dbwebb.se/author/nik",
+        "image": "https://s.gravatar.com/avatar/433d481f73525926b51c863a41f69d59.jpg"
+    }
+}
